@@ -39,7 +39,8 @@ public interface Note {
 	 * Gets the volume if set in range 0 to <code>Short.MAX_VALUE</code>, else
 	 * -1.
 	 * 
-	 * @return the volume in range 0 to <code>Short.MAX_VALUE</code>, else -1.
+	 * @return the volume if set in range 0 to <code>Short.MAX_VALUE</code>,
+	 *         else -1.
 	 */
 	public int getVolume();
 

@@ -102,8 +102,10 @@ public class SingleInstrumentBox extends AbstractSoundSource implements
 	 */
 	public SingleInstrumentBox(SingleInstrumentBox original) {
 		channelCount = original.channelCount;
-		instr = original.instr.clone();
-		play(original.note);
+		if (original.instr != null)
+			instr = original.instr.clone();
+		if (original.note != null)
+			play(original.note);
 	}
 
 	/*

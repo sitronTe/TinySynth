@@ -24,7 +24,7 @@ public class WaveInstrument implements Instrument {
 	// choose to take length here because I have the belief that if will go
 	// faster looking up this variable than asking the note for its length all
 	// the time.
-	private int place = 0, length = 0, singleCycle = 0, vol = 0;
+	private int place = 0, length = -1, singleCycle = 0, vol = -1;
 	private short[] currentPlay = null;
 	private Note note = null;
 
