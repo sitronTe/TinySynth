@@ -90,7 +90,6 @@ public class SimpleTrack extends AbstractSoundSource implements Track {
 	 */
 	@Override
 	public Iterator<Sound> getAliveSounds(long frame) {
-		// TODO SE PÅ DETTE!!! FEIL HER!!!
 		List<Sound> l = new ArrayList<Sound>();
 		for (SimpleSound s : soundList) {
 			if (s.isAlive(frame))
@@ -146,8 +145,14 @@ public class SimpleTrack extends AbstractSoundSource implements Track {
 		Iterator<Sound> it = getAliveSounds(frame);
 		while (it.hasNext()) {
 			short[] r = ((SimpleSound) it.next()).play(1);
-			for (int i = 0; i < channelCount; i++)
-				retVal[i] += r[i];
+			for (int i = 0; i < channelCount; i++) {
+				if ((int) retVal[i] + (int) r[i] > Short.MAX_VALUE)
+					retVal[i] = Short.MAX_VALUE;
+				else if ((int) retVal[i] + (int) r[i] < -Short.MAX_VALUE)
+					retVal[i] = -Short.MAX_VALUE;
+				else
+					retVal[i] += r[i];
+			}
 		}
 		frame++;
 		return retVal;
