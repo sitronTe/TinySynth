@@ -107,7 +107,7 @@ public class SingleInstrumentBox extends AbstractSoundSource implements
 		if (original.note != null)
 			play(original.note);
 		for (SoundEffect e:original.effects)
-			effects.add(e);
+			effects.add(e.clone());
 	}
 
 	/*
