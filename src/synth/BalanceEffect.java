@@ -119,9 +119,7 @@ public class BalanceEffect implements SoundEffect {
 			int t = sound[i] * vol[pos];
 			t /= Short.MAX_VALUE;
 			sound[i] = (short) t;
-			pos++;
-			if (pos == channelCount)
-				pos = 0;
+			pos = ++pos == channelCount ? 0 : pos;
 		}
 
 	}
