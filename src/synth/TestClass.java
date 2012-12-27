@@ -11,30 +11,47 @@ public class TestClass {
 
 	public static void main(String[] args) {
 		Note note;
-		int[] koo = { 10, 5, 0, 2, 0, 1 };
+		int[] koo = { 15, 10, 1, 0 };
+		int[] kooo = {10, 0, 0, 1 };
 		Instrument instr = new WaveInstrument(koo);
+		Instrument instru = new WaveInstrument(kooo);
+		BalanceEffect bal = new BalanceEffect(2);
+		bal.setVolume(0, Short.MAX_VALUE);
+		bal.setVolume(1, 0);
 		InstrumentBox keeper = new SingleInstrumentBox(instr, 2);
+		InstrumentBox keeper2 = new SingleInstrumentBox(instru, 2);
 		Track track= new SimpleTrack(2);
 		Converter ready = new SimpleSoundSourceConverter(track);
 		note = new StdNote("e4");
+		note.setLength(400);
 		track.insertSound(keeper, note, 0*44, 450*44);
 		note = new StdNote("e4");
-		track.insertSound(keeper, note, 500*44, 450*44);
+		note.setVolume((Short.MAX_VALUE) / 2);
+		note.setLength(1950);
+		keeper2.attachSoundEffect(bal);
+		track.insertSound(keeper2, note, 500*44, 88200);
+		keeper2.removeSoundEffect(bal);
 		note = new StdNote("f4");
+		note.setVolume(Short.MAX_VALUE/5);
 		track.insertSound(keeper, note, 1000*44, 450*44);
 		note = new StdNote("g4");
-		track.insertSound(keeper, note, 1500*44, 450*44);
+		note.setVolume((Short.MAX_VALUE) / 2);
+		track.insertSound(keeper2, note, 1500*44, 450*44);
 		note = new StdNote("g4");
-		track.insertSound(keeper, note, 2000*44, 450*44);
+		note.setVolume((Short.MAX_VALUE * 1) / 4);
+		track.insertSound(keeper2, note, 2000*44, 450*44);
 		note = new StdNote("f4");
-		track.insertSound(keeper, note, 2500*44, 450*44);
+		note.setVolume((Short.MAX_VALUE) / 2);
+		track.insertSound(keeper2, note, 2500*44, 450*44);
 		note = new StdNote("e4");
+		note.setVolume((Short.MAX_VALUE * 2) / 4);
 		track.insertSound(keeper, note, 3000*44, 450*44);
 		note = new StdNote("d4");
 		track.insertSound(keeper, note, 3500*44, 450*44);
 		note = new StdNote("c4");
 		track.insertSound(keeper, note, 4000*44, 450*44);
 		note = new StdNote("c4");
+		note.setVolume((Short.MAX_VALUE * 3) / 8);
 		track.insertSound(keeper, note, 4500*44, 450*44);
 		note = new StdNote("d4");
 		track.insertSound(keeper, note, 5000*44, 450*44);
@@ -82,7 +99,7 @@ public class TestClass {
 
 		System.exit(0);
 	}
-
+/*
 	public static byte[] translateShortToBytes(short[] shortList,
 			boolean bigEndian) {
 		if (shortList != null) {
@@ -98,50 +115,6 @@ public class TestClass {
 			return utMat;
 		}
 		return null;
-	}
-/*
-	private class testNote implements Note {
-		private double freq = 440;
-		private int vol = Short.MAX_VALUE / 16;
-
-		@Override
-		public double getFrequency() {
-			return freq;
-		}
-
-		@Override
-		public int getSampleCount44100Hz() {
-			return 44100 / (int) freq;
-		}
-
-		@Override
-		public int getVolume() {
-			return vol;
-		}
-
-		@Override
-		public void setVolume(int volume) {
-			System.out.println("Ikke støttet. Inget behov.");
-		}
-
-		@Override
-		public int getLength() {
-			System.out.println("5 sekunder spilletid");
-			return 5000;
-		}
-
-		@Override
-		public int getLengthSampleCount44100Hz() {
-			System.out.println("Ikke nøyaktig lagd.");
-			return 5 * 44100;
-		}
-
-		@Override
-		public void setLength(int length) {
-			System.out.println("Ikke støttet. Inget behov.");
-
-		}
-
 	}
 */
 }
