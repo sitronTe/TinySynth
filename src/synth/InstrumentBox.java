@@ -113,6 +113,12 @@ public interface InstrumentBox extends SoundSource {
 	public void removeSoundEffect(int effectNumber);
 
 	/**
+	 * Removes all <code>SoundEffect</code>s attached to this
+	 * <code>InstrumentBox</code>.
+	 */
+	public void removeAllSoundEffects();
+
+	/**
 	 * Checks whether output sound from this <code>InstrumentBox</code> has
 	 * attached the <code>SoundEffect</code> in question.
 	 * 

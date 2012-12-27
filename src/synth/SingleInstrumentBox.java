@@ -276,4 +276,10 @@ public class SingleInstrumentBox extends AbstractSoundSource implements
 		return new SingleInstrumentBox(this);
 	}
 
+	@Override
+	public void removeAllSoundEffects() {
+		effects.clear();
+		
+	}
+
 }
