@@ -1,10 +1,25 @@
-package synth;
+package testing;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
+
+import synth.BalanceEffect;
+import synth.FadeInEffect;
+import synth.FadeOutEffect;
+import synth.Instrument;
+import synth.InstrumentBox;
+import synth.Note;
+import synth.SimpleTrack;
+import synth.SingleInstrumentBox;
+import synth.SoundEffect;
+import synth.StdNote;
+import synth.Track;
+import synth.WaveInstrument;
+import tools.Converter;
+import tools.SimpleSoundSourceConverter;
 
 public class TestClass {
 
