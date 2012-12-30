@@ -83,7 +83,7 @@ public interface Mix extends SoundSource {
 	 * Attaches a sound effect for a channel before volume mix.
 	 * 
 	 * @param effect
-	 *            effect to change
+	 *            effect to attach
 	 * @param channel
 	 *            the channel to attach it to. Negative value will attach it to
 	 *            master channel
