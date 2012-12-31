@@ -20,8 +20,8 @@ package synth;
  */
 public interface SoundSourceMix extends Mix {
 	/**
-	 * Attaches a <code>SoundSource</code> to this mixer and returns if the
-	 * attach was successful.
+	 * Attaches a <code>SoundSource</code> to this mixer and returns positive
+	 * value if the attach was successful.
 	 * 
 	 * @param source
 	 *            the <code>SoundSource</code> to attach

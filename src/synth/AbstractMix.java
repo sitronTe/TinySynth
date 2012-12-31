@@ -295,7 +295,9 @@ public abstract class AbstractMix extends AbstractSoundSource implements Mix {
 	 * @see synth.AbstractSoundSource#reset()
 	 */
 	@Override
-	public abstract void reset();
+	public void reset() {
+		throw new UnsupportedOperationException("This mixer does not support reset!");
+	}
 
 	private void isVolumeLegal(int volume) {
 		if (volume < 0 || volume > Short.MAX_VALUE)

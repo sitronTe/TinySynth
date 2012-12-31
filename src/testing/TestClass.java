@@ -26,6 +26,8 @@ public class TestClass {
 	public static void main(String[] args) {
 		// Clicks in sounds seems to emerge from sounds being cut short before
 		// they are muted
+		// TODO Test SimpleSoundSourceMix
+		// TODO Test SimpleSoundChannelMix
 		Note note;
 		int[] koo = { 15, 10, 1, 0 };
 		int[] kooo = { 10, 0, 0, 1 };
