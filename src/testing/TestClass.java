@@ -35,7 +35,7 @@ public class TestClass {
 		// function properly
 		// TODO Make thread safe events possible through interface
 		// TODO Make simple GUI, and "code" generator
-		// TODO Make sound player interface and implementation
+		// TODO Make sound player implementation
 		// TODO Make stuff saveable so no hardcoded sounds are needed
 		// TODO Work, work, work
 		// TODO Additional testing of SimpleSoundSourceMix
