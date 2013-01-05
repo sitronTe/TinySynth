@@ -12,9 +12,13 @@ import synth.FadeOutEffect;
 import synth.Instrument;
 import synth.InstrumentBox;
 import synth.Note;
+import synth.SimpleSoundChannelMix;
+import synth.SimpleSoundSourceMix;
 import synth.SimpleTrack;
 import synth.SingleInstrumentBox;
+import synth.SoundChannelMix;
 import synth.SoundEffect;
+import synth.SoundSourceMix;
 import synth.StdNote;
 import synth.Track;
 import synth.WaveInstrument;
@@ -26,75 +30,117 @@ public class TestClass {
 	public static void main(String[] args) {
 		// Clicks in sounds seems to emerge from sounds being cut short before
 		// they are muted
-		// TODO Test SimpleSoundSourceMix
-		// TODO Test SimpleSoundChannelMix
+		// TODO Add exponential sound change in fade out and in effects
+		// TODO Check if InstrumentBox plays longer than note so effects will
+		// function properly
+		// TODO Make thread safe events possible through interface
+		// TODO Make simple GUI, and "code" generator
+		// TODO Make sound player interface and implementation
+		// TODO Make stuff saveable so no hardcoded sounds are needed
+		// TODO Work, work, work
+		// TODO Additional testing of SimpleSoundSourceMix
+		// TODO Additional testing of SimpleSoundChannelMix
 		Note note;
 		int[] koo = { 15, 10, 1, 0 };
 		int[] kooo = { 10, 0, 0, 1 };
 		Instrument instr = new WaveInstrument(koo);
 		Instrument instru = new WaveInstrument(kooo);
+		/*
+		SoundChannelMix mixer = new SimpleSoundChannelMix(2);
+		FadeOutEffect e = new FadeOutEffect(1, 8820, 44100);
+		Note ko = new StdNote("a3");
+		ko.setLength(2500);
+		ko.setVolume(Short.MAX_VALUE/2);
+		System.out.println(ko.getLengthSampleCount44100Hz());
+		instr.play(ko);
+		instru.play(ko);
+		int in1 = mixer.attach(instr);
+		int in2 = mixer.attach(instru);
+		mixer.setChannelVolume(in1, 0, Short.MAX_VALUE/2);
+		mixer.setChannelVolume(in1, 1, 0);
+		mixer.setChannelVolume(in2, 1, Short.MAX_VALUE/2);
+		mixer.setChannelVolume(in2, 0, Short.MAX_VALUE/10);
+		mixer.attachSoundEffect(e, in1);
+		e = new FadeOutEffect(1, 44100, 8820);
+		mixer.attachSoundEffect(e, in2);
+		*/
 
+		
 		BalanceEffect bal = new BalanceEffect(2);
-		SoundEffect fIn = new FadeInEffect(2, 4410);
-		SoundEffect fOut = new FadeOutEffect(2, 4450, 22050);
-
 		bal.setVolume(0, Short.MAX_VALUE);
 		bal.setVolume(1, 0);
 
 		InstrumentBox keeper = new SingleInstrumentBox(instr, 2);
 		InstrumentBox keeper2 = new SingleInstrumentBox(instru, 2);
-		keeper.attachSoundEffect(fIn);
-		keeper.attachSoundEffect(fOut);
 
-		keeper2.attachSoundEffect(fIn);
-		Track track = new SimpleTrack(2);
-		Converter ready = new SimpleSoundSourceConverter(track);
+		Track track = null;
+		SoundSourceMix mixer = new SimpleSoundSourceMix(2);
 
-		note = new StdNote("e4");
-		note.setLength(400);
-		track.insertSound(keeper, note, 0 * 44, 450 * 44);
-		note = new StdNote("e4");
-		note.setVolume((Short.MAX_VALUE) / 2);
-		note.setLength(1950);
-		keeper2.attachSoundEffect(bal);
-		track.insertSound(keeper2, note, 500 * 44, 88200);
-		keeper2.removeSoundEffect(bal);
-		bal.setVolume(0, 0);
-		bal.setVolume(1, Short.MAX_VALUE);
-		note = new StdNote("f4");
-		note.setVolume(Short.MAX_VALUE / 5);
-		track.insertSound(keeper, note, 1000 * 44, 450 * 44);
-		note = new StdNote("g4");
-		note.setVolume((Short.MAX_VALUE) / 2);
-		keeper2.attachSoundEffect(bal);
-		track.insertSound(keeper2, note, 1500 * 44, 450 * 44);
-		keeper2.removeSoundEffect(bal);
-		note = new StdNote("g4");
-		note.setVolume((Short.MAX_VALUE * 1) / 4);
-		track.insertSound(keeper2, note, 2000 * 44, 450 * 44);
-		note = new StdNote("f4");
-		note.setVolume((Short.MAX_VALUE) / 2);
-		track.insertSound(keeper2, note, 2500 * 44, 450 * 44);
-		note = new StdNote("e4");
-		note.setVolume((Short.MAX_VALUE * 2) / 4);
-		track.insertSound(keeper, note, 3000 * 44, 450 * 44);
-		note = new StdNote("d4");
-		track.insertSound(keeper, note, 3500 * 44, 450 * 44);
-		note = new StdNote("c4");
-		track.insertSound(keeper, note, 4000 * 44, 450 * 44);
-		note = new StdNote("c4");
-		note.setVolume((Short.MAX_VALUE * 3) / 8);
-		track.insertSound(keeper, note, 4500 * 44, 450 * 44);
-		note = new StdNote("d4");
-		track.insertSound(keeper, note, 5000 * 44, 450 * 44);
-		note = new StdNote("e4");
-		track.insertSound(keeper, note, 5500 * 44, 450 * 44);
-		note = new StdNote("e4");
-		track.insertSound(keeper, note, 6000 * 44, 450 * 44);
-		note = new StdNote("d4");
-		track.insertSound(keeper, note, 6500 * 44, 450 * 44);
-		note = new StdNote("d4");
-		track.insertSound(keeper, note, 7000 * 44, 450 * 44);
+		for (int i = 0; i < 2; i++) {
+			keeper.removeAllSoundEffects();
+			keeper2.removeAllSoundEffects();
+			SoundEffect fIn = new FadeInEffect(2, (4410 * 2) / (i + 1));
+			SoundEffect fOut = new FadeOutEffect(2, (4450 * 2) / (i + 1),
+					44100 / (2 * (i + 1)));
+			keeper.attachSoundEffect(fIn);
+			keeper.attachSoundEffect(fOut);
+			keeper2.attachSoundEffect(fIn);
+			track = new SimpleTrack(2);
+			String oct = "" + (4 - (3 * i));
+
+			note = new StdNote("e" + oct);
+			note.setLength(400);
+			track.insertSound(keeper, note, 0 * 44, 450 * 44);
+			note = new StdNote("e" + oct);
+			note.setVolume((Short.MAX_VALUE) / 2);
+			note.setLength(1950);
+			keeper2.attachSoundEffect(bal);
+			track.insertSound(keeper2, note, 500 * 44, 88200);
+			keeper2.removeSoundEffect(bal);
+			bal.setVolume(0, 0);
+			bal.setVolume(1, Short.MAX_VALUE);
+			note = new StdNote("f" + oct);
+			note.setVolume(Short.MAX_VALUE / 5);
+			track.insertSound(keeper, note, 1000 * 44, 450 * 44);
+			note = new StdNote("g" + oct);
+			note.setVolume((Short.MAX_VALUE) / 2);
+			keeper2.attachSoundEffect(bal);
+			track.insertSound(keeper2, note, 1500 * 44, 450 * 44);
+			keeper2.removeSoundEffect(bal);
+			note = new StdNote("g" + oct);
+			note.setVolume((Short.MAX_VALUE * 1) / 4);
+			track.insertSound(keeper2, note, 2000 * 44, 450 * 44);
+			note = new StdNote("f" + oct);
+			note.setVolume((Short.MAX_VALUE) / 2);
+			track.insertSound(keeper2, note, 2500 * 44, 450 * 44);
+			note = new StdNote("e" + oct);
+			note.setVolume((Short.MAX_VALUE * 2) / 4);
+			track.insertSound(keeper, note, 3000 * 44, 450 * 44);
+			note = new StdNote("d" + oct);
+			track.insertSound(keeper, note, 3500 * 44, 450 * 44);
+			note = new StdNote("c" + oct);
+			track.insertSound(keeper, note, 4000 * 44, 450 * 44);
+			note = new StdNote("c" + oct);
+			note.setVolume((Short.MAX_VALUE * 3) / 8);
+			track.insertSound(keeper, note, 4500 * 44, 450 * 44);
+			note = new StdNote("d" + oct);
+			track.insertSound(keeper, note, 5000 * 44, 450 * 44);
+			note = new StdNote("e" + oct);
+			track.insertSound(keeper, note, 5500 * 44, 450 * 44);
+			note = new StdNote("e" + oct);
+			track.insertSound(keeper, note, 6000 * 44, 450 * 44);
+			note = new StdNote("d" + oct);
+			track.insertSound(keeper, note, 6500 * 44, 450 * 44);
+			note = new StdNote("d" + oct);
+			track.insertSound(keeper, note, 7000 * 44, 450 * 44);
+
+			int ch = mixer.attach(track);
+			mixer.setChannelVolume(ch, -1, Short.MAX_VALUE/4);
+			System.out.println(ch);
+		}
+		
+
+		Converter ready = new SimpleSoundSourceConverter(mixer);
 
 		int bufferstorr = 44100;
 		AudioFormat audioformat = ready.getAudioFormat();

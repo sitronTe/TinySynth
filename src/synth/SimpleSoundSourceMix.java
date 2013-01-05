@@ -99,12 +99,19 @@ public class SimpleSoundSourceMix extends AbstractMix implements SoundSourceMix 
 		short[] sound = new short[channelCount];
 		for (int i = 0; i < sources.size(); i++) {
 			SoundSource source = sources.get(i);
-			if (source != null) {
+			if (source != null && source.hasNext()) {
 				short[] s = source.next();
 				super.performEffects(i, s);
 				super.performVolumeMix(i, s);
-				for (int j = 0; j < channelCount; j++)
-					sound[j] += s[j];
+				for (int j = 0; j < channelCount; j++) {
+					int t = sound[j] + s[j];
+					if (t > Short.MAX_VALUE)
+						sound[j] = Short.MAX_VALUE;
+					else if (t < -Short.MAX_VALUE)
+						sound[j] = -Short.MAX_VALUE;
+					else
+						sound[j] += s[j];
+				}
 			}
 		}
 		super.performMasterEffectAndVolumeMix(sound);

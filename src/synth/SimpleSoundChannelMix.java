@@ -99,7 +99,7 @@ public class SimpleSoundChannelMix extends AbstractMix implements
 		short[] temp = new short[channelCount];
 		for (int i = 0; i < sources.size(); i++) {
 			SoundChannel channel = sources.get(i);
-			if (channel != null) {
+			if (channel != null && channel.hasNext()) {
 				short[] s = new short[1];
 				s[0] = channel.next();
 				super.performEffects(i, s);
@@ -107,7 +107,13 @@ public class SimpleSoundChannelMix extends AbstractMix implements
 					temp[j] = s[0];
 				super.performVolumeMix(i, temp);
 				for (int j = 0; j < channelCount; j++) {
-					sound[j] += temp[j];
+					int t = sound[j] + temp[j];
+					if (t > Short.MAX_VALUE)
+						sound[j] = Short.MAX_VALUE;
+					else if (t < -Short.MAX_VALUE)
+						sound[j] = -Short.MAX_VALUE;
+					else
+						sound[j] += temp[j];
 				}
 			}
 		}
