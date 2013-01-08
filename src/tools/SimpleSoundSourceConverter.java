@@ -22,7 +22,7 @@ import synth.SoundSource;
  */
 public class SimpleSoundSourceConverter implements Converter {
 	private final SoundSource source;
-	private final boolean bigEndian = true;
+	private final boolean bigEndian, signed = true;
 
 	/**
 	 * Creates a new <code>SimpleSoundSourceConverter</code> ready to play the
@@ -33,11 +33,28 @@ public class SimpleSoundSourceConverter implements Converter {
 	 */
 	public SimpleSoundSourceConverter(SoundSource source) {
 		this.source = source;
+		this.bigEndian = true;
+	}
+
+	/**
+	 * Creates a new <code>SimpleSoundSourceConverter</code> ready to play the
+	 * brought along <code>SoundSource</code>.
+	 * 
+	 * @param source
+	 *            the <code>SoundSource</code> to play from
+	 * @param bigEndian
+	 *            if conversion to <code>byte</code> array should be done using
+	 *            little or big endian
+	 */
+	public SimpleSoundSourceConverter(SoundSource source, boolean bigEndian) {
+		this.source = source;
+		this.bigEndian = bigEndian;
 	}
 
 	@Override
 	public AudioFormat getAudioFormat() {
-		return new AudioFormat(44100, 16, source.getChannelCount(), true, bigEndian);
+		return new AudioFormat(44100, 16, source.getChannelCount(), signed,
+				bigEndian);
 	}
 
 	@Override
