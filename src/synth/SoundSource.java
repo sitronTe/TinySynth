@@ -20,7 +20,7 @@ package synth;
  */
 public interface SoundSource {
 	/**
-	 * Checks if this <code>SoundChannel</code> has any more audio. Returns
+	 * Checks if this <code>SoundSource</code> has any more audio. Returns
 	 * <code>false</code> if this is not properly initialized or it has finished
 	 * playing, otherwise it is <code>true</code>.
 	 * 
