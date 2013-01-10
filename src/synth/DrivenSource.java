@@ -23,6 +23,4 @@ public interface DrivenSource extends SoundSource, SoundListener {
 	 */
 	@Override
 	public boolean hasNext();
-	// TODO Decide if there should be a standardized way here to generate
-	// SoundSources.
 }

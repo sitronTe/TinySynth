@@ -8,7 +8,7 @@ package synth;
  * @author Sitron Te
  * 
  */
-public class FadeOutEffect implements SoundEffect {
+public class FadeOutEffect implements SoundEffect, Cloneable {
 	private final int channelCount, startFrame, length;
 	private int pos = 0, frame = 0;
 

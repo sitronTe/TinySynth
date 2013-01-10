@@ -8,7 +8,7 @@ package synth;
  * @author Sitron Te
  * 
  */
-public class FadeInEffect implements SoundEffect {
+public class FadeInEffect implements SoundEffect, Cloneable {
 	private final int endFrame, channelCount;
 	private int frame = 0, pos = 0;
 

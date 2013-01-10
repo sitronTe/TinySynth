@@ -1,5 +1,6 @@
 /**
- * 
+ * General TinySynth Heading.
+ * We live in 16 bit signed 44100 Hz sound. 
  */
 package synth;
 

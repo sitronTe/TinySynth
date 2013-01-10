@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  * @author Sitron Te
  * 
  */
-public class WaveInstrument implements Instrument {
+public class WaveInstrument implements Instrument, Cloneable {
 	private static final int WAVE_LENGTH = 4410;
 	private final short[] waveTable;
 	// choose to take length here because I have the belief that if will go

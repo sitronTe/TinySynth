@@ -11,7 +11,7 @@ package synth;
  * @author Sitron Te
  * 
  */
-public class BalanceEffect implements SoundEffect {
+public class BalanceEffect implements SoundEffect, Cloneable {
 	private final int channelCount;
 	private final short[] vol;
 	private int pos = 0;

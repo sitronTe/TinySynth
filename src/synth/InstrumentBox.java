@@ -26,8 +26,9 @@ public interface InstrumentBox extends SoundSource {
 	/**
 	 * Clones this <code>InstrumentBox</code> by invoking the
 	 * <code>clone()</code> on both its <code>Instrument</code> and its
-	 * <code>SoundEffect</code>s. The clone is delivered, that is it is as if
-	 * <code>next()</code> or <code>next(int frames)</code> has not been called.
+	 * <code>SoundEffect</code>s. The clone is delivered fresh, that is it is as
+	 * if <code>next()</code> or <code>next(int frames)</code> has not been
+	 * called.
 	 * 
 	 * @return a clone
 	 */

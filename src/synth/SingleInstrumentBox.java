@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * 
  */
 public class SingleInstrumentBox extends AbstractSoundSource implements
-		InstrumentBox {
+		InstrumentBox, Cloneable {
 	private Instrument instr = null;
 	private Note note = null;
 	private ArrayList<SoundEffect> effects = new ArrayList<SoundEffect>();
