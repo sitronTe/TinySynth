@@ -10,25 +10,28 @@ import synth.BindByMarkSingleDrivenSource;
 //import synth.InstrumentBox;
 //import synth.Note;
 //import synth.SimpleTrack;
-import synth.SingleInstrumentBox;
-import synth.SoundSource;
-import synth.StdNote;
+//import synth.SingleInstrumentBox;
+//import synth.SoundSource;
+//import synth.StdNote;
 //import synth.Track;
 import synth.WaveInstrument;
 import tools.AbstractSoundEventDispatcher;
-import tools.CloneableSourceFactory;
+//import tools.CloneableSourceFactory;
 //import tools.Converter;
 //import tools.Player;
 import tools.SimplePlayer;
 import tools.SimpleSoundSourceConverter;
 import tools.SoundEvent;
 import tools.SoundSourceFactory;
+import tools.SynthSoundFactory;
 
-public class SimpleTests extends AbstractSoundEventDispatcher implements MouseListener {
+public class SimpleTests extends AbstractSoundEventDispatcher implements
+		MouseListener {
+	private String[] eventString = { "a4", "a#4", "e4", "c5" };
+	private int eventNr = 0;
+
 	public SimpleTests() {
-		SoundSource s = new SingleInstrumentBox(new WaveInstrument(),
-				new StdNote("a4"), 2);
-		SoundSourceFactory fac = new CloneableSourceFactory(s);
+		SoundSourceFactory fac = new SynthSoundFactory(new WaveInstrument(), 2);
 		BindByMarkSingleDrivenSource ds = new BindByMarkSingleDrivenSource(2);
 		ds.bindFactoryByMark(fac, 1);
 		this.addSoundListener(ds);
@@ -89,7 +92,7 @@ public class SimpleTests extends AbstractSoundEventDispatcher implements MouseLi
 		 * }
 		 */
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			
+
 			public void run() {
 				SimpleTests myself = new SimpleTests();
 				createGUI(myself);
@@ -101,23 +104,30 @@ public class SimpleTests extends AbstractSoundEventDispatcher implements MouseLi
 		JFrame frame = new JFrame("SimpleTests");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addMouseListener(myself);
-		
+
 		frame.pack();
-        frame.setVisible(true);
+		frame.setVisible(true);
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {
+	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {
+	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		fireSoundEvent(new SoundEvent(this, 1));
+		fireSoundEvent(new SoundEvent(this, eventString[eventNr], 1,
+				new Integer(1)));
+		eventNr++;
+		if (eventNr >= eventString.length)
+			eventNr = 0;
 	}
 
 	@Override

@@ -28,17 +28,15 @@ import tools.SimpleSoundSourceConverter;
 public class TestClass {
 
 	public static void main(String[] args) {
-		// Clicks in sounds seems to emerge from sounds being cut short before
-		// they are muted
 		// TODO Add exponential sound change in fade out and in effects
 		// TODO Check if InstrumentBox plays longer than note so effects will
 		// function properly
-		// TODO Make thread safe events possible through interface
 		// TODO Make simple GUI, and "code" generator
 		// TODO Make stuff saveable so no hardcoded sounds are needed
 		// TODO Work, work, work
 		// TODO Additional testing of SimpleSoundSourceMix
 		// TODO Additional testing of SimpleSoundChannelMix
+		// TODO Additional testing of "thread safe" events
 		Note note;
 		int[] koo = { 15, 10, 1, 0 };
 		int[] kooo = { 10, 0, 0, 1 };

@@ -20,7 +20,8 @@ public class CloneableSourceFactory implements SoundSourceFactory {
 	 * clone the <code>SoundSource</code> brought along.
 	 * 
 	 * @param s
-	 *            the source to clone and deal out later
+	 *            the source to clone and deal out later. Must implement the
+	 *            <code>Cloneable</code> interface
 	 * @throws IllegalArgumentException
 	 *             if the <code>SoundSource</code> does not implement
 	 *             <code>Cloneable</code>
@@ -31,7 +32,8 @@ public class CloneableSourceFactory implements SoundSourceFactory {
 				mySource = (SoundSource) s.getClass().getMethod("clone")
 						.invoke(s);
 			} catch (Exception e) {
-				throw new IllegalArgumentException("SoundSource not cloneable!", e);
+				throw new IllegalArgumentException(
+						"SoundSource not cloneable!", e);
 			}
 		else
 			throw new IllegalArgumentException("SoundSource not cloneable!");
