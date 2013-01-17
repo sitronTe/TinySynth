@@ -98,6 +98,13 @@ public class StdNote implements Note {
 					"Note referred to is out of frequency range");
 	}
 
+	private StdNote(int absolute) {
+		absoluteNoteNumber = absolute;
+		if (getFrequency() < 10 || getFrequency() > 22050)
+			throw new IllegalArgumentException(
+					"Note referred to is out of frequency range");
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -105,7 +112,8 @@ public class StdNote implements Note {
 	 */
 	@Override
 	public double getFrequency() {
-		return ((double)440 * Math.pow(2, ((double)(absoluteNoteNumber - 12 * 5) / 12)));
+		return ((double) 440 * Math.pow(2,
+				((double) (absoluteNoteNumber - 12 * 5) / 12)));
 	}
 
 	/*
@@ -115,7 +123,7 @@ public class StdNote implements Note {
 	 */
 	@Override
 	public int getSampleCount44100Hz() {
-		return (int)(44100/getFrequency());
+		return (int) (44100 / getFrequency());
 	}
 
 	/*
@@ -165,7 +173,7 @@ public class StdNote implements Note {
 		l /= getSampleCount44100Hz();
 		l = Math.rint(l);
 		l *= getSampleCount44100Hz();
-		return (int)l;
+		return (int) l;
 	}
 
 	/*
@@ -179,6 +187,20 @@ public class StdNote implements Note {
 			lengthMS = -1;
 		else
 			lengthMS = length;
+	}
+
+	/**
+	 * Gets a note with the relative distance from this <code>StdNote</code>.
+	 * 
+	 * @param jump
+	 *            the relative distance from this <code>StdNote</code>
+	 * @return a new <code>StdNote</code> with no volume or length set.
+	 * @throws IllegalArgumentException
+	 *             if the note you try to reach is out of defined frequency
+	 *             range.
+	 */
+	public StdNote getNote(int jump) {
+		return new StdNote(absoluteNoteNumber + jump);
 	}
 
 }

@@ -2,12 +2,11 @@
  * General TinySynth Heading.
  * We live in 16 bit signed 44100 Hz sound. 
  */
-package synth;
+package tinyEdge;
 
 import java.util.Hashtable;
 
-import tools.SoundEvent;
-import tools.SoundSourceFactory;
+import synth.SoundSource;
 
 /**
  * The <code>BindByMarkSingleDrivenSource</code> is a thread safe implementation

@@ -12,6 +12,7 @@ import synth.FadeOutEffect;
 import synth.Instrument;
 import synth.InstrumentBox;
 import synth.Note;
+import synth.RecordedSource;
 // import synth.SimpleSoundChannelMix;
 import synth.SimpleSoundSourceMix;
 import synth.SimpleTrack;
@@ -42,6 +43,7 @@ public class TestClass {
 		int[] kooo = { 10, 0, 0, 1 };
 		Instrument instr = new WaveInstrument(koo);
 		Instrument instru = new WaveInstrument(kooo);
+		RecordedSource temporary;
 		/*
 		SoundChannelMix mixer = new SimpleSoundChannelMix(2);
 		FadeOutEffect e = new FadeOutEffect(1, 8820, 44100);
@@ -136,8 +138,10 @@ public class TestClass {
 			System.out.println(ch);
 		}
 		
+		temporary = new RecordedSource(mixer, 88200);
+		temporary = temporary.clone();
 
-		Converter ready = new SimpleSoundSourceConverter(mixer);
+		Converter ready = new SimpleSoundSourceConverter(temporary);
 
 		int bufferstorr = 44100;
 		AudioFormat audioformat = ready.getAudioFormat();
@@ -154,7 +158,7 @@ public class TestClass {
 				line.open(audioformat, bufferstorr);
 				line.start();
 				long temp = System.currentTimeMillis();
-				while (track.hasNext()) {
+				while (temporary.hasNext()) {
 					sound = ready.next(100);
 					line.write(sound, 0, sound.length);
 				}

@@ -2,9 +2,9 @@
  * General TinySynth Heading.
  * We live in 16 bit signed 44100 Hz sound. 
  */
-package synth;
+package tinyEdge;
 
-import tools.SoundListener;
+import synth.SoundSource;
 
 /**
  * The <code>DrivenSource</code> is intended to be a thread safe

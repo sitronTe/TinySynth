@@ -5,7 +5,6 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
-import synth.BindByMarkSingleDrivenSource;
 //import synth.FadeOutEffect;
 //import synth.InstrumentBox;
 //import synth.Note;
@@ -15,15 +14,16 @@ import synth.BindByMarkSingleDrivenSource;
 //import synth.StdNote;
 //import synth.Track;
 import synth.WaveInstrument;
-import tools.AbstractSoundEventDispatcher;
+import tinyEdge.AbstractSoundEventDispatcher;
+import tinyEdge.BindByMarkSingleDrivenSource;
+import tinyEdge.SoundEvent;
+import tinyEdge.SoundSourceFactory;
+import tinyEdge.SynthSoundFactory;
 //import tools.CloneableSourceFactory;
 //import tools.Converter;
 //import tools.Player;
 import tools.SimplePlayer;
 import tools.SimpleSoundSourceConverter;
-import tools.SoundEvent;
-import tools.SoundSourceFactory;
-import tools.SynthSoundFactory;
 
 public class SimpleTests extends AbstractSoundEventDispatcher implements
 		MouseListener {

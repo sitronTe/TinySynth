@@ -2,10 +2,11 @@
  * General TinySynth Heading.
  * We live in 16 bit signed 44100 Hz sound. 
  */
-package tools;
+package tinyEdge;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * An <code>AbstractSoundEventDispatcher</code> is an abstract class to hold all

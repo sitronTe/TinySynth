@@ -2,7 +2,7 @@
  * General TinySynth Heading.
  * We live in 16 bit signed 44100 Hz sound. 
  */
-package synth;
+package tinyEdge;
 
 /**
  * Exception for use in the <code>TinySynth</code> environment. Used when

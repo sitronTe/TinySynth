@@ -3,10 +3,10 @@ package testing;
 import synth.SimpleTrack;
 //import synth.SingleInstrumentBox;
 import synth.SoundSource;
+import tinyEdge.CloneableSourceFactory;
+import tinyEdge.SoundSourceFactory;
 //import synth.StdNote;
 //import synth.WaveInstrument;
-import tools.SoundSourceFactory;
-import tools.CloneableSourceFactory;
 
 public class NoSoundTest {
 	public static void main(String[] args) {
