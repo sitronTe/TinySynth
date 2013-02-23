@@ -17,7 +17,7 @@ package synth;
  * @author Sitron Te
  * 
  */
-public interface SoundChannel {
+public interface SoundChannel extends StoreableSynthPart {
 	/**
 	 * Checks if this <code>SoundChannel</code> has any more audio. Returns
 	 * <code>false</code> if this is not properly initialized or it has finished

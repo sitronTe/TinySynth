@@ -4,6 +4,12 @@
  */
 package synth;
 
+import java.beans.DefaultPersistenceDelegate;
+import java.beans.Encoder;
+import java.beans.Expression;
+import java.beans.PersistenceDelegate;
+import java.beans.XMLEncoder;
+
 /**
  * The <code>BalanceEffect</code> is just a neat way to control volume balance
  * between different channels. Can also be used as a volume control.
@@ -67,10 +73,11 @@ public class BalanceEffect implements SoundEffect, Cloneable {
 						"All volumes must be non-negative!");
 		this.channelCount = channelCount;
 		vol = new short[channelCount];
+		startVols = new short[channelCount];
 		for (int i = 0; i < vol.length; i++) {
 			vol[i] = volume[i];
+			startVols[i] = volume[i];
 		}
-		startVols = vol;
 	}
 
 	/**
@@ -158,6 +165,23 @@ public class BalanceEffect implements SoundEffect, Cloneable {
 	@Override
 	public SoundEffect clone() {
 		return new BalanceEffect(this);
+	}
+
+	private class MyDelegate extends DefaultPersistenceDelegate {
+		protected Expression instantiate(Object oldInstance, Encoder out) {
+			// In case of misuse, we don't know what to do..
+			if (oldInstance.getClass() != BalanceEffect.class)
+				return null;
+			Object[] o = new Object[] {
+					((BalanceEffect) oldInstance).channelCount,
+					((BalanceEffect) oldInstance).vol };
+			return new Expression(oldInstance, oldInstance.getClass(), "new", o);
+		}
+	}
+
+	@Override
+	public void registerPersistenceDelegate(XMLEncoder encoder) {
+		encoder.setPersistenceDelegate(this.getClass(), new MyDelegate());
 	}
 
 }

@@ -16,6 +16,8 @@ public class StdNote implements Note {
 	// absoluteNoteNumber should be correct for a 12 note scale. A4 (440Hz)
 	// should be at 12 * 5 = 60
 	private final int absoluteNoteNumber;
+	// TODO use StdNoteCore
+	private StdNoteCore noteCore;
 	private int volume = -1, lengthMS = -1;
 
 	/**
@@ -112,8 +114,7 @@ public class StdNote implements Note {
 	 */
 	@Override
 	public double getFrequency() {
-		return ((double) 440 * Math.pow(2,
-				((double) (absoluteNoteNumber - 12 * 5) / 12)));
+		return noteCore.getFrequency();
 	}
 
 	/*

@@ -4,6 +4,12 @@
  */
 package synth;
 
+import java.beans.DefaultPersistenceDelegate;
+import java.beans.Encoder;
+import java.beans.Expression;
+import java.beans.PersistenceDelegate;
+import java.beans.XMLEncoder;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 /**
@@ -20,13 +26,15 @@ import java.util.NoSuchElementException;
  */
 public class WaveInstrument implements Instrument, Cloneable {
 	private static final int WAVE_LENGTH = 4410;
+
 	private final short[] waveTable;
+	private final int[] conArgs;
 	// choose to take length here because I have the belief that if will go
 	// faster looking up this variable than asking the note for its length all
 	// the time.
-	private int place = 0, length = -1, singleCycle = 0, vol = -1;
-	private short[] currentPlay = null;
-	private Note note = null;
+	private transient int place = 0, length = -1, singleCycle = 0, vol = -1;
+	private transient short[] currentPlay = null;
+	private transient Note note = null;
 
 	/**
 	 * Constructs this <code>WaveInstrument</code> as a sinusoidal sound.
@@ -40,6 +48,8 @@ public class WaveInstrument implements Instrument, Cloneable {
 			table[i] = (short) (v * (double) Short.MAX_VALUE);
 		}
 		waveTable = table;
+		conArgs = new int[1];
+		conArgs[0] = 1;
 	}
 
 	/**
@@ -73,6 +83,7 @@ public class WaveInstrument implements Instrument, Cloneable {
 			throw new IllegalArgumentException(
 					"Wavetable was not properly balanced!");
 		waveTable = t;
+		conArgs = null;
 	}
 
 	/**
@@ -81,21 +92,18 @@ public class WaveInstrument implements Instrument, Cloneable {
 	 * 
 	 * @param harmonies
 	 *            the relative volume of all harmonies in this sound. The base
-	 *            frequency is <code>harmonies[0]</code>. Higher value is higher
-	 *            relative volume. Final volume is unchangeable.
+	 *            frequency is <code>harmonies[0]</code>. Higher absolute value
+	 *            is higher relative volume. Negative value means opposite
+	 *            phase. Final volume is unchangeable.
 	 * @throws IllegalArgumentException
-	 *             if the sum of all harmonies is 0, or if a relative volume is
-	 *             set to be negative.
+	 *             If a relative volume is set to be negative.
 	 * 
 	 */
 	public WaveInstrument(int[] harmonies) {
 		// test for illegal arguments
 		int totVol = 0;
 		for (int v : harmonies) {
-			if (v < 0)
-				throw new IllegalArgumentException(
-						"Could not cope with negative volume!");
-			totVol += v;
+			totVol += Math.abs(v);
 		}
 		if (totVol == 0)
 			throw new IllegalArgumentException("Silenced sound is not allowed!");
@@ -116,6 +124,9 @@ public class WaveInstrument implements Instrument, Cloneable {
 			table[i] = (short) v;
 		}
 		waveTable = table;
+		conArgs = new int[harmonies.length];
+		for (int i = 0; i < harmonies.length; i++)
+			conArgs[i] = harmonies[i];
 	}
 
 	/**
@@ -128,6 +139,7 @@ public class WaveInstrument implements Instrument, Cloneable {
 	 */
 	public WaveInstrument(WaveInstrument original) {
 		this.waveTable = original.waveTable;
+		this.conArgs = original.conArgs;
 	}
 
 	/*
@@ -153,6 +165,8 @@ public class WaveInstrument implements Instrument, Cloneable {
 	 */
 	@Override
 	public short next() {
+		// TODO there should be an option to make use of the complete wavetable.
+		// That is, take the average of those places we right now are skipping.
 		if (!hasNext())
 			throw new NoSuchElementException(
 					"There are no more sound in this instrument!");
@@ -222,4 +236,64 @@ public class WaveInstrument implements Instrument, Cloneable {
 	public Instrument clone() {
 		return new WaveInstrument(this);
 	}
+
+	private boolean hasConArgs(WaveInstrument w) {
+		return w.conArgs != null;
+	}
+
+	private int[] getConArgs(WaveInstrument w) {
+		return w.conArgs;
+	}
+
+	private short[] getWaveTable(WaveInstrument w) {
+		return w.waveTable;
+	}
+
+	private class MyDelegate extends DefaultPersistenceDelegate {
+		protected Expression instantiate(Object oldInstance, Encoder out) {
+			// In case of misuse, we don't know what to do..
+			if (oldInstance.getClass() != WaveInstrument.class)
+				return null;
+			if (hasConArgs((WaveInstrument) oldInstance))
+				return new Expression(
+						oldInstance,
+						oldInstance.getClass(),
+						"new",
+						new Object[] { getConArgs((WaveInstrument) oldInstance) });
+			else
+				return new Expression(
+						oldInstance,
+						oldInstance.getClass(),
+						"new",
+						new Object[] { getWaveTable((WaveInstrument) oldInstance) });
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(waveTable);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		WaveInstrument other = (WaveInstrument) obj;
+		if (!Arrays.equals(waveTable, other.waveTable))
+			return false;
+		return true;
+	}
+
+	@Override
+	public void registerPersistenceDelegate(XMLEncoder encoder) {
+		encoder.setPersistenceDelegate(this.getClass(), new MyDelegate());
+	}
+
 }

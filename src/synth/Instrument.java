@@ -21,7 +21,8 @@ public interface Instrument extends SoundChannel {
 	/**
 	 * Sets the next note this instruments shall play. After this is called
 	 * <code>next()</code> and <code>next(int frames)</code> will return data
-	 * for this note. It will take heed to length and volume information in this {@link Note}.
+	 * for this note. It will take heed to length and volume information in this
+	 * {@link Note}.
 	 * 
 	 * @param note
 	 *            the <code>Note</code> to be played.

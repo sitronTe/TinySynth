@@ -4,7 +4,7 @@
  */
 package synth;
 
-import java.beans.PersistenceDelegate;
+import java.beans.XMLEncoder;
 
 /**
  * The <code>StoreableSynthPart</code> interface is an interface designed for
@@ -15,10 +15,14 @@ import java.beans.PersistenceDelegate;
  */
 public interface StoreableSynthPart {
 	/**
-	 * Gets a <code>PersistenceDelegate</code> that can convert the current
-	 * class to XML format.
+	 * Registers a <code>PersistenceDelegate</code> with this
+	 * <code>XMLEncoder</code> so it can encode this class in XML format. This
+	 * method should also be called recursively on all pieces this
+	 * <code>StoreableSynthPart</code> may contain.
 	 * 
-	 * @return a <code>PersistenceDelegate</code> compatible with this class.
+	 * @param encoder
+	 *            the encoder to register the <code>PersistenceDelegate</code>
+	 *            to.
 	 */
-	public PersistenceDelegate getCompatiblePersistenceDelegate();
+	public void registerPersistenceDelegate(XMLEncoder encoder);
 }

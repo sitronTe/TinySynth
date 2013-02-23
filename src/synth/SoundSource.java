@@ -18,7 +18,7 @@ package synth;
  * @author Sitron Te
  * 
  */
-public interface SoundSource {
+public interface SoundSource {//extends StoreableSynthPart {
 	/**
 	 * Checks if this <code>SoundSource</code> has any more audio. Returns
 	 * <code>false</code> if this is not properly initialized or it has finished

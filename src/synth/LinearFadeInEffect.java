@@ -4,11 +4,17 @@
  */
 package synth;
 
+import java.beans.DefaultPersistenceDelegate;
+import java.beans.Encoder;
+import java.beans.Expression;
+import java.beans.PersistenceDelegate;
+import java.beans.XMLEncoder;
+
 /**
  * @author Sitron Te
  * 
  */
-public class FadeInEffect implements SoundEffect, Cloneable {
+public class LinearFadeInEffect implements SoundEffect, Cloneable {
 	private final int endFrame, channelCount;
 	private int frame = 0, pos = 0;
 
@@ -19,7 +25,7 @@ public class FadeInEffect implements SoundEffect, Cloneable {
 	 * @param original
 	 *            the effect to mimic
 	 */
-	public FadeInEffect(FadeInEffect original) {
+	public LinearFadeInEffect(LinearFadeInEffect original) {
 		endFrame = original.endFrame;
 		channelCount = original.channelCount;
 	}
@@ -35,7 +41,7 @@ public class FadeInEffect implements SoundEffect, Cloneable {
 	 * @throws IllegalArgumenException
 	 *             if toFrame is negative or channel count is 0 or less
 	 */
-	public FadeInEffect(int channelCount, int toFrame) {
+	public LinearFadeInEffect(int channelCount, int toFrame) {
 		if (toFrame < 0)
 			throw new IllegalArgumentException("Must have length");
 		if (channelCount <= 0)
@@ -94,7 +100,23 @@ public class FadeInEffect implements SoundEffect, Cloneable {
 	 */
 	@Override
 	public SoundEffect clone() {
-		return new FadeInEffect(this);
+		return new LinearFadeInEffect(this);
+	}
+
+	private class MyDelegate extends DefaultPersistenceDelegate {
+		protected Expression instantiate(Object oldInstance, Encoder out) {
+			if (oldInstance.getClass() != LinearFadeInEffect.class)
+				return null;
+			Object[] o = new Object[] {
+					((LinearFadeInEffect) oldInstance).channelCount,
+					((LinearFadeInEffect) oldInstance).endFrame };
+			return new Expression(oldInstance, oldInstance.getClass(), "new", o);
+		}
+	}
+
+	@Override
+	public void registerPersistenceDelegate(XMLEncoder encoder) {
+		encoder.setPersistenceDelegate(this.getClass(), new MyDelegate());
 	}
 
 }

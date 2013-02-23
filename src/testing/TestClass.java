@@ -7,8 +7,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import synth.BalanceEffect;
-import synth.FadeInEffect;
-import synth.FadeOutEffect;
+import synth.LinearFadeInEffect;
+import synth.LinearFadeOutEffect;
 import synth.Instrument;
 import synth.InstrumentBox;
 import synth.Note;
@@ -29,10 +29,22 @@ import tools.SimpleSoundSourceConverter;
 public class TestClass {
 
 	public static void main(String[] args) {
+		// TODO If Storeable interface is to be kept, maybe it should be changed to "registerPersistenceDelegate"
+		// TODO Look more into Reflection to see if we really need the Storeable interface
+		// TODO Rewrite StdNote to be mostly an enum.
+		// TODO Make Note saveable
+		// TODO Write InstrumentBoxDisassembler
+		// TODO Write TrackDissasembler
+		// TODO Write javadoc for InstrumentBank.
+		// TODO Make certain InstrumentBank is a good solution.
+		// TODO Test BalanceEffect XML.
+		// TODO Test LinearFadeInEffect XML.
+		// TODO Test LinearFadeOutEffect XML.
+		// TODO Make beans that can serialize and reconstruct all/most classes
 		// TODO Add exponential sound change in fade out and in effects
 		// TODO Check if InstrumentBox plays longer than note so effects will
 		// function properly
-		// TODO Make simple GUI, and "code" generator
+		// TODO Make simple GUI
 		// TODO Make stuff saveable so no hardcoded sounds are needed
 		// TODO Work, work, work
 		// TODO Additional testing of SimpleSoundSourceMix
@@ -45,26 +57,19 @@ public class TestClass {
 		Instrument instru = new WaveInstrument(kooo);
 		RecordedSource temporary;
 		/*
-		SoundChannelMix mixer = new SimpleSoundChannelMix(2);
-		FadeOutEffect e = new FadeOutEffect(1, 8820, 44100);
-		Note ko = new StdNote("a3");
-		ko.setLength(2500);
-		ko.setVolume(Short.MAX_VALUE/2);
-		System.out.println(ko.getLengthSampleCount44100Hz());
-		instr.play(ko);
-		instru.play(ko);
-		int in1 = mixer.attach(instr);
-		int in2 = mixer.attach(instru);
-		mixer.setChannelVolume(in1, 0, Short.MAX_VALUE/2);
-		mixer.setChannelVolume(in1, 1, 0);
-		mixer.setChannelVolume(in2, 1, Short.MAX_VALUE/2);
-		mixer.setChannelVolume(in2, 0, Short.MAX_VALUE/10);
-		mixer.attachSoundEffect(e, in1);
-		e = new FadeOutEffect(1, 44100, 8820);
-		mixer.attachSoundEffect(e, in2);
-		*/
+		 * SoundChannelMix mixer = new SimpleSoundChannelMix(2); FadeOutEffect e
+		 * = new FadeOutEffect(1, 8820, 44100); Note ko = new StdNote("a3");
+		 * ko.setLength(2500); ko.setVolume(Short.MAX_VALUE/2);
+		 * System.out.println(ko.getLengthSampleCount44100Hz()); instr.play(ko);
+		 * instru.play(ko); int in1 = mixer.attach(instr); int in2 =
+		 * mixer.attach(instru); mixer.setChannelVolume(in1, 0,
+		 * Short.MAX_VALUE/2); mixer.setChannelVolume(in1, 1, 0);
+		 * mixer.setChannelVolume(in2, 1, Short.MAX_VALUE/2);
+		 * mixer.setChannelVolume(in2, 0, Short.MAX_VALUE/10);
+		 * mixer.attachSoundEffect(e, in1); e = new FadeOutEffect(1, 44100,
+		 * 8820); mixer.attachSoundEffect(e, in2);
+		 */
 
-		
 		BalanceEffect bal = new BalanceEffect(2);
 		bal.setVolume(0, Short.MAX_VALUE);
 		bal.setVolume(1, 0);
@@ -78,8 +83,8 @@ public class TestClass {
 		for (int i = 0; i < 2; i++) {
 			keeper.removeAllSoundEffects();
 			keeper2.removeAllSoundEffects();
-			SoundEffect fIn = new FadeInEffect(2, (4410 * 2) / (i + 1));
-			SoundEffect fOut = new FadeOutEffect(2, (4450 * 2) / (i + 1),
+			SoundEffect fIn = new LinearFadeInEffect(2, (4410 * 2) / (i + 1));
+			SoundEffect fOut = new LinearFadeOutEffect(2, (4450 * 2) / (i + 1),
 					44100 / (2 * (i + 1)));
 			keeper.attachSoundEffect(fIn);
 			keeper.attachSoundEffect(fOut);
@@ -134,10 +139,10 @@ public class TestClass {
 			track.insertSound(keeper, note, 7000 * 44, 450 * 44);
 
 			int ch = mixer.attach(track);
-			mixer.setChannelVolume(ch, -1, Short.MAX_VALUE/4);
+			mixer.setChannelVolume(ch, -1, Short.MAX_VALUE / 4);
 			System.out.println(ch);
 		}
-		
+
 		temporary = new RecordedSource(mixer, 88200);
 		temporary = temporary.clone();
 

@@ -17,7 +17,7 @@ package synth;
  * @author Sitron Te
  * 
  */
-public interface SoundEffect {
+public interface SoundEffect extends StoreableSynthPart {
 	/**
 	 * Alters the brought along array <code>sound</code> according to what this
 	 * <code>SoundEffect</code> is initialized to do. The array

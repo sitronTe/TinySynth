@@ -4,11 +4,17 @@
  */
 package synth;
 
+import java.beans.DefaultPersistenceDelegate;
+import java.beans.Encoder;
+import java.beans.Expression;
+import java.beans.PersistenceDelegate;
+import java.beans.XMLEncoder;
+
 /**
  * @author Sitron Te
  * 
  */
-public class FadeOutEffect implements SoundEffect, Cloneable {
+public class LinearFadeOutEffect implements SoundEffect, Cloneable {
 	private final int channelCount, startFrame, length;
 	private int pos = 0, frame = 0;
 
@@ -19,7 +25,7 @@ public class FadeOutEffect implements SoundEffect, Cloneable {
 	 * @param original
 	 *            the effect to mimic
 	 */
-	public FadeOutEffect(FadeOutEffect original) {
+	public LinearFadeOutEffect(LinearFadeOutEffect original) {
 		this.channelCount = original.channelCount;
 		this.startFrame = original.startFrame;
 		this.length = original.length;
@@ -39,7 +45,7 @@ public class FadeOutEffect implements SoundEffect, Cloneable {
 	 *             if startFrame is negative or channel count is 0 or less or if
 	 *             length is 0 or less
 	 */
-	public FadeOutEffect(int channelCount, int startframe, int length) {
+	public LinearFadeOutEffect(int channelCount, int startframe, int length) {
 		if (channelCount <= 0)
 			throw new IllegalArgumentException(
 					"Must have minimum one sound channel!");
@@ -105,6 +111,23 @@ public class FadeOutEffect implements SoundEffect, Cloneable {
 	 */
 	@Override
 	public SoundEffect clone() {
-		return new FadeOutEffect(this);
+		return new LinearFadeOutEffect(this);
+	}
+
+	private class MyDelegate extends DefaultPersistenceDelegate {
+		protected Expression instantiate(Object oldInstance, Encoder out) {
+			if (oldInstance.getClass() != LinearFadeOutEffect.class)
+				return null;
+			Object[] o = new Object[] {
+					((LinearFadeOutEffect) oldInstance).channelCount,
+					((LinearFadeOutEffect) oldInstance).startFrame,
+					((LinearFadeOutEffect) oldInstance).length };
+			return new Expression(oldInstance, oldInstance.getClass(), "new", o);
+		}
+	}
+
+	@Override
+	public void registerPersistenceDelegate(XMLEncoder encoder) {
+		encoder.setPersistenceDelegate(this.getClass(), new MyDelegate());
 	}
 }
