@@ -29,10 +29,6 @@ import tools.SimpleSoundSourceConverter;
 public class TestClass {
 
 	public static void main(String[] args) {
-		// TODO If Storeable interface is to be kept, maybe it should be changed to "registerPersistenceDelegate"
-		// TODO Look more into Reflection to see if we really need the Storeable interface
-		// TODO Rewrite StdNote to be mostly an enum.
-		// TODO Make Note saveable
 		// TODO Write InstrumentBoxDisassembler
 		// TODO Write TrackDissasembler
 		// TODO Write javadoc for InstrumentBank.

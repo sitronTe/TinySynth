@@ -4,6 +4,11 @@
  */
 package synth;
 
+import java.beans.DefaultPersistenceDelegate;
+import java.beans.Encoder;
+import java.beans.Expression;
+import java.beans.XMLEncoder;
+
 /**
  * A <code>StdNote</code> is meant to be a standard representation of a
  * <code>Note</code> in the <code>TinySynth</code> environment. It contains all
@@ -12,99 +17,33 @@ package synth;
  * @author Sitron Te
  * 
  */
-public class StdNote implements Note {
-	// absoluteNoteNumber should be correct for a 12 note scale. A4 (440Hz)
-	// should be at 12 * 5 = 60
-	private final int absoluteNoteNumber;
-	// TODO use StdNoteCore
+public class StdNote implements Note, Cloneable {
 	private StdNoteCore noteCore;
 	private int volume = -1, lengthMS = -1;
+
+	/**
+	 * Creates a new <code>StdNote</code> with the given
+	 * <code>StdNoteCore</code>.
+	 * 
+	 * @param core
+	 *            the <code>StdNoteCore</code> to use.
+	 */
+	public StdNote(StdNoteCore core) {
+		noteCore = core;
+	}
 
 	/**
 	 * Creates a new <code>StdNote</code>.
 	 * 
 	 * @param note
-	 *            the literal name of the note. Must be two or three characters
-	 *            long. First letter is note (a-g ('h' is counted as 'b')),
-	 *            second is optional halfstep ('b' for down or '#'for up), third
-	 *            is octave (0-9). Only note and octave is mandatory.
+	 *            the literal name of the note. Must be the same as name of a
+	 *            {@link StdNoteCore}.
 	 * @throws IllegalArgumentException
 	 *             if argument has illegal format (too long, too short, illegal
-	 *             values etc.) or if <code>getFrequency()</code> will return
-	 *             illegal value for this note.
+	 *             values etc.).
 	 */
 	public StdNote(String note) {
-		char noteNumber = 'a';
-		int n = 0, o = 0;
-		if (note.length() > 3 || note.length() < 2)
-			throw new IllegalArgumentException(
-					"Note must be minimum 2 and maksimum 3 letters long");
-		if ("abcdefgABCDEFGhH".indexOf(note.charAt(0)) < 0)
-			throw new IllegalArgumentException(
-					"String must start with note name!");
-		if ("abcdefgABCDEFGhH".indexOf(note.charAt(0)) > 13)
-			noteNumber += 1;
-		else
-			noteNumber += "abcdefgABCDEFG".indexOf(note.charAt(0)) % 7;
-		switch (noteNumber) {
-		case 'a':
-			n = 0;
-			o = 1;
-			break;
-		case 'b':
-			n = 2;
-			o = 1;
-			break;
-		case 'c':
-			n = 3;
-			o = 0;
-			break;
-		case 'd':
-			n = 5;
-			o = 0;
-			break;
-		case 'e':
-			n = 7;
-			o = 0;
-			break;
-		case 'f':
-			n = 8;
-			o = 0;
-			break;
-		case 'g':
-			n = 10;
-			o = 0;
-			break;
-		}
-		if (note.length() == 3) {
-			if ("0123456789".indexOf(note.charAt(2)) < 0)
-				throw new IllegalArgumentException("Octave not recognized");
-			o += (note.charAt(2) - '0');
-			if (note.charAt(1) == '#')
-				n += 1;
-			else if (note.charAt(1) == 'b')
-				n -= 1;
-			else
-				throw new IllegalArgumentException(
-						"Illegal note format. When three letters define the note, the second must be b or #");
-		} else {
-			if ("0123456789".indexOf(note.charAt(1)) < 0)
-				throw new IllegalArgumentException("Octave not recognized");
-			o += (note.charAt(1) - '0');
-		}
-		n += 12 * o;
-		absoluteNoteNumber = n;
-
-		if (getFrequency() < 10 || getFrequency() > 22050)
-			throw new IllegalArgumentException(
-					"Note referred to is out of frequency range");
-	}
-
-	private StdNote(int absolute) {
-		absoluteNoteNumber = absolute;
-		if (getFrequency() < 10 || getFrequency() > 22050)
-			throw new IllegalArgumentException(
-					"Note referred to is out of frequency range");
+		noteCore = StdNoteCore.valueOf(note);
 	}
 
 	/*
@@ -201,7 +140,31 @@ public class StdNote implements Note {
 	 *             range.
 	 */
 	public StdNote getNote(int jump) {
-		return new StdNote(absoluteNoteNumber + jump);
+		return new StdNote(noteCore.getNoteCoreRelativeDistance(jump));
+	}
+
+	@Override
+	public StdNote clone() {
+		StdNote ret = new StdNote(noteCore);
+		ret.lengthMS = lengthMS;
+		ret.volume = volume;
+		return ret;
+	}
+
+	@Override
+	public void registerPersistenceDelegate(XMLEncoder encoder) {
+		encoder.setPersistenceDelegate(getClass(), new MyDelegate());
+	}
+
+	private class MyDelegate extends DefaultPersistenceDelegate {
+		protected Expression instantiate(Object oldInstance, Encoder out) {
+			// In case of misuse, we don't know what to do..
+			if (oldInstance.getClass() != StdNote.class)
+				return null;
+			StdNote old = (StdNote) oldInstance;
+			return new Expression(oldInstance, oldInstance.getClass(), "new",
+					new Object[] { old.noteCore });
+		}
 	}
 
 }

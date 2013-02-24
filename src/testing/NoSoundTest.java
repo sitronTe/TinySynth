@@ -1,6 +1,6 @@
 package testing;
 
-import guiEdge.WaveTableView;
+//import guiEdge.WaveTableView;
 
 import java.beans.DefaultPersistenceDelegate;
 import java.beans.Encoder;
@@ -21,6 +21,7 @@ import java.util.Hashtable;
 
 import synth.Instrument;
 import synth.StdNote;
+import synth.StdNoteCore;
 //import synth.SimpleTrack;
 //import synth.SingleInstrumentBox;
 //import synth.SoundSource;
@@ -44,30 +45,15 @@ public class NoSoundTest {
 		// e.printStackTrace();
 		// }
 		// System.out.println(s.toString());
-		System.out.println(new StdNote("a4").getFrequency());
-		int[] h = { 10, 5 };
-		short[] s = new short[4410];
-		s[0] = 10;
-		s[100] = -10;
-		s[1000] = 5;
-		s[1500] = -5;
-		Instrument in = new WaveInstrument(h);
+		
 		XMLEncoder encoder = null;
-		InstrumentBank bank = new InstrumentBank();
-		bank.addInstrument(in);
 		try {
 			encoder = new XMLEncoder(System.out);
-			in.registerPersistenceDelegate(encoder);
-			encoder.writeObject(in);
-			in = new WaveInstrument(s);
-			bank.addInstrument(in);
-			encoder.writeObject(in);
-			in = new WaveInstrument();
-			bank.addInstrument(in);
-			in =in.clone();
-			bank.addInstrument(in);
-			encoder.writeObject(in);
-			encoder.writeObject(bank);
+			StdNote no = new StdNote(StdNoteCore.C5);
+			no.registerPersistenceDelegate(encoder);
+			no.setLength(750000);
+			no.setVolume(750);
+			encoder.writeObject(no);
 		} catch (Exception e) {
 			System.err.println("Exception caught");
 			e.printStackTrace();

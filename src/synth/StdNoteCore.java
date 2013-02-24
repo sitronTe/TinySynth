@@ -37,4 +37,12 @@ public enum StdNoteCore {
 		return ((double) 440 * Math.pow(2,
 				((double) (absoluteNoteNumber - 12 * 5) / 12)));
 	}
+	
+	public StdNoteCore getNoteCoreRelativeDistance(int distance) {
+		int absNoteNumber = absoluteNoteNumber + distance;
+		for (StdNoteCore c: values())
+			if (c.absoluteNoteNumber == absNoteNumber)
+				return c;
+		throw new IllegalArgumentException("Note out of range! Frequency would be out of range!");
+	}
 }

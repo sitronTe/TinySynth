@@ -13,7 +13,7 @@ package synth;
  * @author Sitron Te
  * 
  */
-public interface Note {//extends StoreableSynthPart {
+public interface Note extends StoreableSynthPart {
 	/**
 	 * Gets the frequency this <code>Note</code> is representing in
 	 * <code>double</code> precision. Will always return a positive value

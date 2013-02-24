@@ -7,7 +7,6 @@ package synth;
 import java.beans.DefaultPersistenceDelegate;
 import java.beans.Encoder;
 import java.beans.Expression;
-import java.beans.PersistenceDelegate;
 import java.beans.XMLEncoder;
 
 /**
