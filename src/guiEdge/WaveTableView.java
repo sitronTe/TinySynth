@@ -12,6 +12,7 @@ public class WaveTableView extends JComponent {
 	private Color gridColor = null, centerColor = null, waveBGColor = null;
 	private int gridLines = 0;
 	private boolean centerShown = true;
+	
 	private short[] waveTable = null;
 
 	public Color getGridColor() {
