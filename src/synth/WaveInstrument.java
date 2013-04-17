@@ -267,7 +267,7 @@ public class WaveInstrument implements Instrument, Cloneable {
 						new Object[] { getWaveTable((WaveInstrument) oldInstance) });
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -293,6 +293,16 @@ public class WaveInstrument implements Instrument, Cloneable {
 	@Override
 	public void registerPersistenceDelegate(XMLEncoder encoder) {
 		encoder.setPersistenceDelegate(this.getClass(), new MyDelegate());
+	}
+
+	public int[] getConstructorArgs() {
+		// TODO Is this OK?
+		return conArgs;
+	}
+
+	public short[] getWaveTableClone() {
+		// TODO Is this OK?
+		return Arrays.copyOf(waveTable, waveTable.length);
 	}
 
 }

@@ -2,52 +2,35 @@ package guiEdge;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 
 public class WaveTableView extends JComponent {
 	private static final long serialVersionUID = 1L;
-	// TODO Should listen to a property change for a wavetable.
-	// private short[] waveWindow;
-	private Color gridColor = null, centerColor = null, waveBGColor = null;
-	private int gridLines = 0;
+
+	private int gridVerticalLines = 3, gridHorizontalLines = 3;
 	private boolean centerShown = true;
-	
+
 	private short[] waveTable = null;
 
-	public Color getGridColor() {
-		return gridColor;
+	public int getGridHorizontalLines() {
+		return gridHorizontalLines;
 	}
 
-	public void setGridColor(Color gridColor) {
-		this.gridColor = gridColor;
+	public void setGridHorizontalLines(int gridLines) {
+		this.gridHorizontalLines = gridLines;
 		repaint();
 	}
 
-	public Color getCenterColor() {
-		return centerColor;
+	public int getGridVerticalLines() {
+		return gridVerticalLines;
 	}
 
-	public void setCenterColor(Color centerColor) {
-		this.centerColor = centerColor;
-		repaint();
-	}
-
-	public Color getWaveBGColor() {
-		return waveBGColor;
-	}
-
-	public void setWaveBGColor(Color waveBGColor) {
-		this.waveBGColor = waveBGColor;
-		repaint();
-	}
-
-	public int getGridLines() {
-		return gridLines;
-	}
-
-	public void setGridLines(int gridLines) {
-		this.gridLines = gridLines;
+	public void setGridVerticalLines(int gridLines) {
+		this.gridVerticalLines = gridLines;
 		repaint();
 	}
 
@@ -59,11 +42,12 @@ public class WaveTableView extends JComponent {
 		this.centerShown = centerShown;
 		repaint();
 	}
-	
+
 	public void setWaveTable(short[] waveTable) {
 		this.waveTable = waveTable;
+		repaint();
 	}
-	
+
 	public short[] getWaveTable() {
 		return this.waveTable;
 	}
@@ -71,16 +55,76 @@ public class WaveTableView extends JComponent {
 	@Override
 	public void paint(Graphics g) {
 		int w = getWidth(), h = getHeight();
-		g.setColor(getBackground());
+		// TODO Should insets be counted in?
+		// TODO Check if we overstep our borders, and if so, how much?
+		paintBG(g, w, h);
+		paintGrid(g, w, h);
+		paintGraph(g, w, h);
+	}
+
+	private void paintBG(Graphics g, int w, int h) {
+		Color c = UIManager.getColor(LookAndFeelSetter.waveGraphBG);
+		g.setColor(c == null ? getBackground() : c);
 		g.fillRect(0, 0, w, h);
-		g.setColor(getForeground());
-		// TODO Painting for testing, remove:
-		g.drawLine(w / 2, 0, w / 2, h);
-		g.drawLine(0, h / 2, w, h / 2);
-		g.drawLine(0, 0, w, h);
-		g.drawLine(0, h, w, 0);
-		// TODO Remember insets
-		// TODO Paint this things graphics
+	}
+
+	private void paintGrid(Graphics g, int w, int h) {
+		Color c = UIManager.getColor(LookAndFeelSetter.waveGraphGrid);
+		g.setColor(c == null ? getForeground() : c);
+		// draw vertical lines
+		if (gridVerticalLines > 0)
+			for (int i = 1; i <= gridVerticalLines; i++) {
+				int relW = (w * i) / (gridVerticalLines + 1);
+				g.drawLine(relW, 0, relW, h);
+			}
+		// draw horizontal lines
+		if (gridVerticalLines > 0)
+			for (int i = 1; i <= gridHorizontalLines; i++) {
+				int relH = (h * i) / (gridHorizontalLines + 1);
+				g.drawLine(0, relH, w, relH);
+			}
+		c = UIManager.getColor(LookAndFeelSetter.waveGraphGridCenterLine);
+		if (isCenterShown()) {
+			g.setColor(c == null ? getForeground() : c);
+			// draw center line
+			g.drawLine(0, h / 2, w, h / 2);
+		}
+	}
+
+	private void paintGraph(Graphics g, int w, int h) {
+		Color c = UIManager.getColor(LookAndFeelSetter.waveGraph);
+		g.setColor(c == null ? getForeground() : c);
+		if (waveTable == null) {
+			g.drawLine(0, 0, w, h);
+			g.drawLine(0, h, w, 0);
+		} else {
+			// TODO Determine if detail level is correct.
+			// TODO This algorithm should be made faster.
+			// First value must always be used. Short may never reach
+			// Integer.MAX_VALUE
+			int lastX = Integer.MAX_VALUE;
+			int lastY = Integer.MAX_VALUE;
+			List<Integer> xList = new ArrayList<>();
+			List<Integer> yList = new ArrayList<>();
+			for (int x = 0; x < waveTable.length; x++) {
+				int relX = (x * w) / waveTable.length;
+				int relY = (h / 2)
+						+ ((waveTable[x] * h) / (2 * Short.MIN_VALUE));
+				if (relX != lastX || relY != lastY) {
+					xList.add(relX);
+					yList.add(relY);
+					lastX = relX;
+					lastY = relY;
+				}
+			}
+			int[] xArray = new int[xList.size()];
+			int[] yArray = new int[yList.size()];
+			for (int i = 0; i < xArray.length; i++) {
+				xArray[i] = xList.get(i);
+				yArray[i] = yList.get(i);
+			}
+			g.drawPolyline(xArray, yArray, xArray.length);
+		}
 	}
 
 }

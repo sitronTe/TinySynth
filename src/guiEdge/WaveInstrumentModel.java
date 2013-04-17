@@ -12,6 +12,7 @@ public class WaveInstrumentModel {
 
 	private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	private WaveInstrument instrument;
+	private short[] waveTable;
 
 	public WaveInstrument getInstrument() {
 		return instrument;
@@ -19,27 +20,35 @@ public class WaveInstrumentModel {
 
 	public void setInstrument(WaveInstrument instrument) {
 		WaveInstrument oldInstrument = this.instrument;
+		short[] oldWaveTable = waveTable;
+		int[] oldConstrArgs = oldInstrument == null ? null : oldInstrument
+				.getConstructorArgs();
+		int[] constrArgs = instrument == null ? null : instrument
+				.getConstructorArgs();
+		this.waveTable = instrument == null ? null : instrument
+				.getWaveTableClone();
 		this.instrument = instrument;
-		// TODO Fire property changes.
-		oldInstrument.toString();
+		pcs.firePropertyChange(HARMONICS_PROPERTY, oldConstrArgs, constrArgs);
+		pcs.firePropertyChange(WAVE_TABLE_PROPERTY, oldWaveTable, waveTable);
 	}
 
 	public short[] getWaveTable() {
-		// TODO
-		return null;
+		return waveTable;
 	}
 
 	public void setWaveTable(short[] waveTable) {
-		// TODO
+		setInstrument(new WaveInstrument(waveTable));
 	}
 
 	public int[] getInstrumentHarmonics() {
-		// TODO
-		return null;
+		return instrument == null ? null : instrument.getConstructorArgs();
 	}
 
 	public void setInstrumentHarmonics(int[] harmonics) {
-		// TODO
+		if (harmonics == null)
+			setInstrument(new WaveInstrument());
+		else
+			setInstrument(new WaveInstrument(harmonics));
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {

@@ -1,5 +1,7 @@
 package guiEdge;
 
+import java.awt.Color;
+
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -12,7 +14,13 @@ import javax.swing.UIManager.LookAndFeelInfo;
  * 
  */
 public class LookAndFeelSetter {
+	public static final String waveGraphBG = "waveGraphBG";
+	public static final String waveGraphGrid = "waveGraphGrid";
+	public static final String waveGraphGridCenterLine = "waveGraphGridCenterLine";
+	public static final String waveGraph = "waveGraph";
+
 	public static void setLookAndFeel() {
+		setCustomColors();
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -23,5 +31,12 @@ public class LookAndFeelSetter {
 		} catch (Exception e) {
 			System.err.println("Could not set apropriate LookAndFeel");
 		}
+	}
+
+	private static void setCustomColors() {
+		UIManager.put(waveGraphBG, new Color(0, 0, 0));
+		UIManager.put(waveGraphGrid, new Color(0x33, 0x33, 0x33));
+		UIManager.put(waveGraphGridCenterLine, new Color(0xcc, 0x44, 0x44));
+		UIManager.put(waveGraph, new Color(0xdd, 0xdd, 0xdd));
 	}
 }
