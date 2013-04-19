@@ -1,4 +1,4 @@
-package guiEdge;
+package uiEdge;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -68,7 +68,10 @@ public class WaveInstrumentPanel extends JPanel implements
 		LookAndFeelSetter.setLookAndFeel();
 		JFrame fr = new JFrame();
 		WaveInstrumentPanel panel = new WaveInstrumentPanel();
-		panel.setModel(new WaveInstrumentModel());
+		WaveInstrumentModel model = new WaveInstrumentModel();
+		WaveSoundController soundCtrl = new WaveSoundController();
+		soundCtrl.setModel(model);
+		panel.setModel(model);
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fr.add(panel);
 		fr.pack();
@@ -171,6 +174,32 @@ public class WaveInstrumentPanel extends JPanel implements
 			constraints.gridwidth = 2;
 			overtoneListPanel = new ScrollOvertonePanel();
 			add(overtoneListPanel, constraints);
+			
+			constraints = (GridBagConstraints) constraints.clone();
+			constraints.gridy = 3;
+			constraints.gridx = 0;
+			constraints.gridwidth = 1;
+			JButton btn = new JButton("Play");
+			btn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					if (model != null)
+						model.setPlaying(true);
+				}
+			});
+			add(btn, constraints);
+			
+			constraints = (GridBagConstraints) constraints.clone();
+			constraints.gridx = 1;
+			btn = new JButton("Stop");
+			btn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					if (model != null)
+						model.setPlaying(false);
+				}
+			});
+			add(btn, constraints);
 		}
 
 		void addOvertoneSpinner() {

@@ -1,4 +1,4 @@
-package guiEdge;
+package uiEdge;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -18,6 +18,24 @@ public class WaveTableView extends JComponent {
 
 	public int getGridHorizontalLines() {
 		return gridHorizontalLines;
+	}
+
+	public void setMinimum(short minimum) {
+		// TODO
+	}
+
+	public short getMinimum() {
+		// TODO
+		return 0;
+	}
+
+	public void setMaximum(short maximum) {
+		// TODO
+	}
+
+	public short getMaximum() {
+		// TODO
+		return 0;
 	}
 
 	public void setGridHorizontalLines(int gridLines) {
@@ -100,6 +118,7 @@ public class WaveTableView extends JComponent {
 		} else {
 			// TODO Determine if detail level is correct.
 			// TODO This algorithm should be made faster.
+			// TODO Take heed of minimum and maximum.
 			// First value must always be used. Short may never reach
 			// Integer.MAX_VALUE
 			int lastX = Integer.MAX_VALUE;

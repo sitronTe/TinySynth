@@ -2,24 +2,24 @@ package testing;
 
 //import guiEdge.WaveTableView;
 
-import java.beans.DefaultPersistenceDelegate;
-import java.beans.Encoder;
-import java.beans.Expression;
-import java.beans.XMLDecoder;
+//import java.beans.DefaultPersistenceDelegate;
+//import java.beans.Encoder;
+//import java.beans.Expression;
+//import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
+//import java.io.BufferedInputStream;
+//import java.io.BufferedOutputStream;
+//import java.io.FileInputStream;
+//import java.io.FileOutputStream;
+//import java.io.ObjectInputStream;
+//import java.io.ObjectOutputStream;
+//import java.lang.reflect.Array;
+//import java.lang.reflect.Field;
+//import java.util.HashMap;
+//import java.util.HashSet;
+//import java.util.Hashtable;
 
-import synth.Instrument;
+//import synth.Instrument;
 import synth.StdNote;
 import synth.StdNoteCore;
 //import synth.SimpleTrack;
@@ -28,8 +28,8 @@ import synth.StdNoteCore;
 //import tinyEdge.CloneableSourceFactory;
 //import tinyEdge.SoundSourceFactory;
 //import synth.StdNote;
-import synth.WaveInstrument;
-import tinyEdge.InstrumentBank;
+//import synth.WaveInstrument;
+//import tinyEdge.InstrumentBank;
 
 public class NoSoundTest {
 	public static void main(String[] args) {

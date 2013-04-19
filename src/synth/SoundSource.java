@@ -24,7 +24,7 @@ public interface SoundSource {//extends StoreableSynthPart {
 	 * <code>false</code> if this is not properly initialized or it has finished
 	 * playing, otherwise it is <code>true</code>.
 	 * 
-	 * @return whether this <code>SoundChannel</code> has more content
+	 * @return whether this <code>SoundSource</code> has more content
 	 */
 	public boolean hasNext();
 

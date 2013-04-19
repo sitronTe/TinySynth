@@ -1,4 +1,4 @@
-package guiEdge;
+package uiEdge;
 
 import java.awt.Color;
 
