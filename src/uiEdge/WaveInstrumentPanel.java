@@ -13,12 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -49,8 +52,9 @@ public class WaveInstrumentPanel extends JPanel implements
 	private AlterInstrumentPanel alterInstrumentPanel;
 
 	private SpinnerChangeListener spinnerListener = new SpinnerChangeListener();
-	private JCheckBox autoUpdateInstrument = new JCheckBox(
-			"Auto");
+	private JCheckBox autoUpdateInstrument = new JCheckBox("Auto");
+	private JRadioButton viewNoteWaveTable = new JRadioButton("View note");
+	private JRadioButton viewWaveTable = new JRadioButton("View wavetable");
 
 	public WaveInstrumentPanel() {
 		waveView = new WaveTableView();
@@ -174,9 +178,35 @@ public class WaveInstrumentPanel extends JPanel implements
 			constraints.gridwidth = 2;
 			overtoneListPanel = new ScrollOvertonePanel();
 			add(overtoneListPanel, constraints);
-			
+
 			constraints = (GridBagConstraints) constraints.clone();
 			constraints.gridy = 3;
+			constraints.gridx = 0;
+			constraints.gridwidth = 2;
+			// TODO Bar choose note
+
+			ButtonGroup grp = new ButtonGroup();
+			grp.add(viewNoteWaveTable);
+			grp.add(viewWaveTable);
+
+			constraints = (GridBagConstraints) constraints.clone();
+			constraints.gridy = 4;
+			constraints.gridx = 0;
+			constraints.gridwidth = 1;
+			add(viewWaveTable, constraints);
+
+			constraints = (GridBagConstraints) constraints.clone();
+			constraints.gridy = 4;
+			constraints.gridx = 1;
+			add(viewNoteWaveTable, constraints);
+
+			WaveTableViewActionListener wl = new WaveTableViewActionListener();
+			viewNoteWaveTable.addActionListener(wl);
+			viewWaveTable.addActionListener(wl);
+			viewWaveTable.setSelected(true);
+
+			constraints = (GridBagConstraints) constraints.clone();
+			constraints.gridy = 5;
 			constraints.gridx = 0;
 			constraints.gridwidth = 1;
 			JButton btn = new JButton("Play");
@@ -188,7 +218,7 @@ public class WaveInstrumentPanel extends JPanel implements
 				}
 			});
 			add(btn, constraints);
-			
+
 			constraints = (GridBagConstraints) constraints.clone();
 			constraints.gridx = 1;
 			btn = new JButton("Stop");
@@ -319,6 +349,19 @@ public class WaveInstrumentPanel extends JPanel implements
 		public void stateChanged(ChangeEvent e) {
 			if (autoUpdateInstrument.isSelected())
 				updateInstrument();
+		}
+	}
+
+	private class WaveTableViewActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (model != null) {
+				if (viewNoteWaveTable.isSelected()) {
+					waveView.setWaveTable(model.getNoteSetWaveTable());
+				} else {
+					waveView.setWaveTable(model.getWaveTable());
+				}
+			}
 		}
 	}
 }
